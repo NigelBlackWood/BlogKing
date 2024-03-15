@@ -1,80 +1,103 @@
-const quotes = [
-  "The quick brown fox jumps over the lazy dog.",
-  "Simplicity is the ultimate sophistication.",
-  "In the middle of difficulty lies opportunity.",
-  "Success is not final, failure is not fatal: It is the courage to continue that counts."
-];
-
-const quoteElement = document.getElementById('quote');
-const textElement = document.getElementById('text');
-const inputElement = document.getElementById('input');
-const startButton = document.getElementById('start');
-const resetButton = document.getElementById('reset');
-const resultElement = document.getElementById('result');
-const timerElement = document.getElementById('timer');
-const accuracyElement = document.getElementById('accuracy');
-const statsElement = document.getElementById('stats');
-
-let currentQuoteIndex;
-let startTime;
-let timerInterval;
-
-function getRandomQuote() {
-  return quotes[Math.floor(Math.random() * quotes.length)];
-}
-
-function startTest() {
-  currentQuoteIndex = Math.floor(Math.random() * quotes.length);
-  const quote = quotes[currentQuoteIndex];
-  textElement.textContent = quote;
-  document.getElementById('quote').textContent = quote; // Updated
-  inputElement.value = '';
-  inputElement.focus();
-  startTime = Date.now();
-  timerInterval = setInterval(updateTimer, 1000);
-}
-
-
-function resetTest() {
-  clearInterval(timerInterval);
-  inputElement.value = '';
-  inputElement.focus();
-  resultElement.textContent = '';
-  timerElement.textContent = 'Time: 0s';
-  accuracyElement.textContent = 'Accuracy: 100%';
-}
-
-function updateTimer() {
-  const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-  timerElement.textContent = `Time: ${elapsedTime}s`;
-}
-
-function checkTyping() {
-  const typedText = inputElement.value.trim();
-  const originalText = quotes[currentQuoteIndex];
-  const accuracy = calculateAccuracy(originalText, typedText);
-  accuracyElement.textContent = `Accuracy: ${accuracy}%`;
-
-  if (typedText === originalText) {
-    clearInterval(timerInterval);
-    const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-    resultElement.textContent = `Congratulations! You typed the text correctly in ${elapsedTime} seconds.`;
-  } else {
-    resultElement.textContent = 'Keep typing...';
-  }
-}
-
-function calculateAccuracy(originalText, typedText) {
-  const minLength = Math.min(originalText.length, typedText.length);
-  let correctCount = 0;
-  for (let i = 0; i < minLength; i++) {
-    if (originalText[i] === typedText[i]) {
-      correctCount++;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Typing Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-  }
-  return ((correctCount / originalText.length) * 100).toFixed(2);
-}
 
-startButton.addEventListener('click', startTest);
-resetButton.addEventListener('click', resetTest);
-inputElement.addEventListener('input', checkTyping);
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    textarea {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Typing Test</h1>
+    <p>Type the following text:</p>
+    <p id="quote"></p>
+    <textarea id="input" rows="4" placeholder="Start typing here..." disabled></textarea>
+    <div id="stats">
+      <span id="timer">Time: 0s</span>
+      <span id="accuracy">Accuracy: 100%</span>
+    </div>
+    <button id="start" onclick="startTest()">Start</button>
+    <button id="reset" onclick="resetTest()">Reset</button>
+    <div id="result"></div>
+  </div>
+  <script>
+    const quotes = [
+      "The quick brown fox jumps over the lazy dog.",
+      "Simplicity is the ultimate sophistication.",
+      "In the middle of difficulty lies opportunity.",
+      "Success is not final, failure is not fatal: It is the courage to continue that counts."
+    ];
+
+    const quoteElement = document.getElementById('quote');
+    const inputElement = document.getElementById('input');
+    const resultElement = document.getElementById('result');
+    const timerElement = document.getElementById('timer');
+    const accuracyElement = document.getElementById('accuracy');
+
+    let currentQuoteIndex;
+    let startTime;
+    let timerInterval;
+
+    function startTest() {
+      currentQuoteIndex = Math.floor(Math.random() * quotes.length);
+      const quote = quotes[currentQuoteIndex];
+      quoteElement.textContent = quote;
+      inputElement.disabled = false;
+      inputElement.value = '';
+      inputElement.focus();
+      startTime = Date.now();
+      timerInterval = setInterval(updateTimer, 1000);
+    }
+
+    function resetTest() {
+      clearInterval(timerInterval);
+      inputElement.disabled = true;
+      inputElement.value = '';
+      quoteElement.textContent = '';
+      resultElement.textContent = '';
+      timerElement.textContent = 'Time: 0s';
+      accuracyElement.textContent = 'Accuracy: 100%';
+    }
+
+    function updateTimer() {
+      const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+      timerElement.textContent = `Time: ${elapsedTime}s`;
+    }
+
+    </script>
+</body>
+</html>
