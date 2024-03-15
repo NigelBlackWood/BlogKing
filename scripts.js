@@ -27,11 +27,13 @@ function startTest() {
   currentQuoteIndex = Math.floor(Math.random() * quotes.length);
   const quote = quotes[currentQuoteIndex];
   textElement.textContent = quote;
+  document.getElementById('quote').textContent = quote; // Updated
   inputElement.value = '';
   inputElement.focus();
   startTime = Date.now();
   timerInterval = setInterval(updateTimer, 1000);
 }
+
 
 function resetTest() {
   clearInterval(timerInterval);
